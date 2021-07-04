@@ -4,6 +4,7 @@
         <div v-show="datapresent" id="canvas">
 
         </div>
+        <div id="hovertext" v-html="hovertextContent" :style="styleObject"></div>
     </div>
 </template>
 
@@ -32,7 +33,19 @@ export default {
             yaxis: null,
             xaxis: null,
 
-            linegenerator: null
+            linegenerator: null,
+
+            listeningRect: null,
+            hoverline: null,
+
+
+            hovertextContent: '',
+            styleObject: {
+                display: 'none',
+                left: 0,
+                top: 0
+
+            }
 
         }
     },
@@ -57,7 +70,7 @@ export default {
             this.xScale.domain([0, this.numberstoshow[0].length-1]);
             this.yScale.domain([0, d3.max(this.numberstoshow, l => d3.max(l, n => n))]);
 
-            console.log(d3.max(this.numberstoshow, l => d3.max(l, n => n)));
+            //console.log(d3.max(this.numberstoshow, l => d3.max(l, n => n)));
             //this.xs = Array.from(Array(this.numberstoshow[0].length).keys())
 
             this.yaxis = d3.axisLeft().scale(this.yScale); 
@@ -72,14 +85,18 @@ export default {
                 .attr("class", "axis")
                 .call(this.yaxis);
 
+
+
             this.numberstoshow.forEach((element, i) => {
                 //console.log(element);
                 this.svg.append("path")
                     .datum(element) // 10. Binds data to the line 
                     .attr("class", "line") // Assign a class for styling 
                     .attr("d", this.linegenerator) // 11. Calls the line generator
-                    .style("stroke", this.colors[i]);
+                    .style("stroke", this.colors[i])
             });
+
+
 
         },
         getX(p, index) {
@@ -87,7 +104,44 @@ export default {
         },
         getY(p) {
             return this.yScale(p);
+        },
+
+        onMouseMove(event) {
+            let mousePosition = d3.pointer(event);
+            let x0 = this.xScale.invert(mousePosition[0]),
+                i = Math.round(x0);
+            this.hoverline
+                .attr("transform", "translate(" + this.xScale(i) + "," + 0 + ")")
+                .style("opacity", '1');
+
+            //this.fokustext
+            //    .attr("transform", "translate(" + this.xScale(i) + "," + this.yScale(this.numberstoshow[0][i]) + ")")
+            //    .style("display", "inline");
+            //this.fokustext.select(".tooltipx").text(i + ":");
+            //this.fokustext.select(".tooltipys").text(this.getValuesAtIndex(i));
+            this.hovertextContent = i + ":<br> " + this.getValuesAtIndex(i);
+
+            this.styleObject['left'] = (event.pageX+20) + 'px';
+            this.styleObject['top'] = event.pageY + "px";
+            this.styleObject['display'] = 'block';
+
+        },
+        onMouseLeave() {
+            this.hoverline.style("opacity", 0);
+            this.styleObject['display'] = 'none';
+        },
+        getValuesAtIndex(i) {
+            let str = [];
+            this.numberstoshow.forEach((element, index) => {
+                str.push('<span style="color:' + this.colors[index] + ';">' + this.around(element[i]) + "</span>")
+            });
+            return str.join('<br>');
+        },
+        around(n) {
+            let f = d3.format(".2f");
+            return f(n);
         }
+
 
         
 
@@ -118,6 +172,26 @@ export default {
             .x(this.getX) // set the x values for the line generator
             .y(this.getY) // set the y values for the line generator 
             .curve(d3.curveMonotoneX) // apply smoothing to the line
+        
+        this.listeningRect = this.svg
+            .append("rect")
+            .attr("class", "listening-rect")
+            .attr("width", this.width)
+            .attr("height", this.height)
+            .on("mousemove", this.onMouseMove)
+            .on("mouseleave", this.onMouseLeave);
+
+        let hoverlinegroup = this.svg.append("g").attr("class", "hoverline");
+
+        this.hoverline =  hoverlinegroup
+            .append("line")
+            .attr("x1", 0).attr("x2", 0)
+            .attr("y1", 0).attr("y2", this.height)
+            .style("opacity", 0);
+
+
+        // Fokus-text
+
     },
 
     destroyed() {
@@ -136,6 +210,43 @@ export default {
         stroke-width: 2;
         fill: none;
         stroke: black;
+    }
+
+    .mouse-line {
+        stroke: black;
+        stroke-width: 1px;
+        opacity: 0;
+    }
+
+    .mouse-cirlce {
+        stroke: black;
+        fill: none;
+        stroke-width: 1px;
+        opacity: 0;
+    }
+
+    .listening-rect {
+        fill: transparent;
+    }
+
+    .hoverline {
+        stroke-width: 1px;
+        stroke: black;
+        fill: none;
+
+    }
+    .tooltip {
+        fill: white;
+    }
+    .tooltipx {
+        color: black;
+    }
+    #hovertext {
+        display: none;
+        position: absolute;
+        padding: 0.1em;
+        background-color: rgba(255,255,255,0.8);
+        border: 1px solid black;
     }
 
 </style>
