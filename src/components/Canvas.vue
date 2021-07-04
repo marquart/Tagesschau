@@ -14,7 +14,8 @@ export default {
     name: 'Canvas',
     props: {
         words: Array,
-        numberstoshow: Array
+        numberstoshow: Array,
+        colors: Array
     },
 
     data() {
@@ -29,7 +30,9 @@ export default {
             yScale: null,
 
             yaxis: null,
-            xaxis: null
+            xaxis: null,
+
+            linegenerator: null
 
         }
     },
@@ -48,12 +51,18 @@ export default {
     methods: {
         draw() {
             //const color = d3.scaleOrdinal(d3.schemeDark2);
+            this.svg.selectAll("g.axis").remove()
+            this.svg.selectAll("path.line").remove()
             
             this.xScale.domain([0, this.numberstoshow[0].length-1]);
             this.yScale.domain([0, d3.max(this.numberstoshow, l => d3.max(l, n => n))]);
 
+            console.log(d3.max(this.numberstoshow, l => d3.max(l, n => n)));
+            //this.xs = Array.from(Array(this.numberstoshow[0].length).keys())
+
             this.yaxis = d3.axisLeft().scale(this.yScale); 
             this.xaxis = d3.axisBottom().scale(this.xScale);
+
             this.svg.append("g")
                 .attr("class", "axis")
                 .attr("transform", "translate(0," + this.height + ")")
@@ -63,7 +72,24 @@ export default {
                 .attr("class", "axis")
                 .call(this.yaxis);
 
+            this.numberstoshow.forEach((element, i) => {
+                //console.log(element);
+                this.svg.append("path")
+                    .datum(element) // 10. Binds data to the line 
+                    .attr("class", "line") // Assign a class for styling 
+                    .attr("d", this.linegenerator) // 11. Calls the line generator
+                    .style("stroke", this.colors[i]);
+            });
+
+        },
+        getX(p, index) {
+            return this.xScale(index);
+        },
+        getY(p) {
+            return this.yScale(p);
         }
+
+        
 
     },
     computed: {
@@ -80,10 +106,18 @@ export default {
         this.svg = d3
             .select("#canvas")
             .append("svg")
-            .attr("width", this.width)
-            .attr("height", this.height);
+            .attr("width", this.width+2*this.margin)
+            .attr("height", this.height+2*this.margin)
+            .append('g')
+            .attr("transform", "translate(" + this.margin + "," + this.margin + ")");
+
         this.yScale = d3.scaleLinear().range([this.height, 0]);
         this.xScale = d3.scaleLinear().range([0, this.width]);
+
+        this.linegenerator = d3.line()
+            .x(this.getX) // set the x values for the line generator
+            .y(this.getY) // set the y values for the line generator 
+            .curve(d3.curveMonotoneX) // apply smoothing to the line
     },
 
     destroyed() {
@@ -93,6 +127,15 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
+    .axis {
+        font-family: inherit;
+        font-size: inherit;
+    }
+    .line {
+        stroke-width: 2;
+        fill: none;
+        stroke: black;
+    }
 
 </style>

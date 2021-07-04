@@ -3,6 +3,7 @@
         <span class="card"
             v-for="(word, i) in words"
             :key="i"
+            :style="setColor(i)"
             @click="deleteWord(i)"
         >
         {{word}} ⌫
@@ -16,7 +17,8 @@
 export default {
     name: 'Selection',
     props: {
-        words: Array
+        words: Array,
+        colors: Array
     },
     data() {
         return {
@@ -26,6 +28,9 @@ export default {
     methods: {
         deleteWord(index) {
             this.$emit('delete', index)
+        },
+        setColor(index) {
+            return {"color": this.colors[index], "border-color": this.colors[index]}
         }
 
     },
@@ -58,14 +63,14 @@ export default {
 
     .card {
         display: inline;
-        padding: 0.5em;
+        padding: 0.4em;
         margin: 0.3em;
-        border: 1px solid #000000;
+        border: 2.5px solid #000000;
     }
     .card:hover {
         background-color: #de141b;
-        color: white;
-        border-color: white;        
+        color: white !important;
+        border-color: white !important;
         cursor: pointer;
     }
 </style>

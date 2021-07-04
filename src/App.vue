@@ -2,8 +2,9 @@
   <div id="app">
     <h1>Tagesschau</h1>
     <SearchBar :words="words"  @add="addWord"/>
-    <Selection :words="wordstoshow"  @delete="deleteWordFromIndex"/>
-    <Canvas :words="wordstoshow" :numberstoshow="numberstoshow"/>
+    <div v-if="showerror" class="errormsg" @click="hideError">{{errorstring}}</div>
+    <Selection :words="wordstoshow" :colors="colors" @delete="deleteWordFromIndex"/>
+    <Canvas :words="wordstoshow" :numberstoshow="numberstoshow" :colors="colors"/>
   </div>
 </template>
 
@@ -26,10 +27,13 @@ export default {
 
     data() {
       return {
+        colors : ["#56ae6c","#9350a1","#697cd4","#ba496b","#53b3b6"],
         numbers: {},
         words: [],
         wordstoshow: [],
-        numberstoshow: []
+        numberstoshow: [],
+        showerror: false,
+        errorstring: ""
       }
     },
 
@@ -50,13 +54,22 @@ export default {
       },
 
       addWord(newWord) {
-        if (!this.wordstoshow.includes(newWord)) {
+
+        if (this.wordstoshow.length < this.colors.length && !this.wordstoshow.includes(newWord)) {
+          this.hideError();
           this.numberstoshow.length = 0;
           this.wordstoshow.push(newWord)
           this.wordstoshow.forEach(element => {
             this.numberstoshow.push(this.numbers[element]);
           });
+        } else {
+          this.errorstring = "Bitte wähle höchstens fünf einzigartige Begriffe aus";
+          this.showerror = true;
         }
+      },
+
+      hideError() {
+        this.showerror = false;
       },
 
       deleteWordFromIndex(index) {
@@ -70,6 +83,10 @@ export default {
 
     computed: {
       
+    },
+
+    destroyed() {
+
     }
 
 }
@@ -94,4 +111,19 @@ export default {
     margin: 0;
     height: 100%;
   }
+
+  .errormsg {
+    margin-top: 1em;
+    margin-left: 35%;
+    margin-right: 35%;
+    text-align: center;
+    width: 30%;
+
+    padding: 0.4em;
+    margin-top: 0.8em;
+
+    background-color: #de141b;
+    color: white;
+    border: 2.5px solid white;
+    }
 </style>
