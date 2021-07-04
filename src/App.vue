@@ -74,6 +74,7 @@ export default {
 
       deleteWordFromIndex(index) {
         if (index>=0 && index < this.wordstoshow.length) {
+          this.hideError();
           this.wordstoshow.splice(index, 1);
           this.numberstoshow.splice(index, 1);
         }

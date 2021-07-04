@@ -4,7 +4,16 @@
         <div v-show="datapresent" id="canvas">
 
         </div>
-        <div id="hovertext" v-html="hovertextContent" :style="styleObject"></div>
+        <div id="hovertext" :style="styleObject">
+            <p class="date">{{mouseindex}}:</p>
+            <p  v-for="(list, i) in numberstoshow"
+                :key="i"
+                :style="{color: colors[i]}"
+                class="dataparagraph"
+            >
+            {{around(list[mouseindex])}}
+            </p>
+        </div>
     </div>
 </template>
 
@@ -38,8 +47,7 @@ export default {
             listeningRect: null,
             hoverline: null,
 
-
-            hovertextContent: '',
+            mouseindex: 0,
             styleObject: {
                 display: 'none',
                 left: 0,
@@ -107,9 +115,9 @@ export default {
         },
 
         onMouseMove(event) {
-            let mousePosition = d3.pointer(event);
-            let x0 = this.xScale.invert(mousePosition[0]),
-                i = Math.round(x0);
+            let mousePosition = d3.pointer(event),
+                x = this.xScale.invert(mousePosition[0]),
+                i = Math.round(x);
             this.hoverline
                 .attr("transform", "translate(" + this.xScale(i) + "," + 0 + ")")
                 .style("opacity", '1');
@@ -119,8 +127,7 @@ export default {
             //    .style("display", "inline");
             //this.fokustext.select(".tooltipx").text(i + ":");
             //this.fokustext.select(".tooltipys").text(this.getValuesAtIndex(i));
-            this.hovertextContent = i + ":<br> " + this.getValuesAtIndex(i);
-
+            this.mouseindex = i;
             this.styleObject['left'] = (event.pageX+20) + 'px';
             this.styleObject['top'] = event.pageY + "px";
             this.styleObject['display'] = 'block';
@@ -129,13 +136,6 @@ export default {
         onMouseLeave() {
             this.hoverline.style("opacity", 0);
             this.styleObject['display'] = 'none';
-        },
-        getValuesAtIndex(i) {
-            let str = [];
-            this.numberstoshow.forEach((element, index) => {
-                str.push('<span style="color:' + this.colors[index] + ';">' + this.around(element[i]) + "</span>")
-            });
-            return str.join('<br>');
         },
         around(n) {
             let f = d3.format(".2f");
@@ -155,13 +155,13 @@ export default {
 
     mounted() {
         this.width = window.innerWidth - 2*this.margin;
-        this.height = window.innerHeight  - 2*this.margin;
+        this.height = window.innerHeight  - 5*this.margin;
 
         this.svg = d3
             .select("#canvas")
             .append("svg")
             .attr("width", this.width+2*this.margin)
-            .attr("height", this.height+2*this.margin)
+            .attr("height", this.height+5*this.margin)
             .append('g')
             .attr("transform", "translate(" + this.margin + "," + this.margin + ")");
 
@@ -184,13 +184,12 @@ export default {
         let hoverlinegroup = this.svg.append("g").attr("class", "hoverline");
 
         this.hoverline =  hoverlinegroup
-            .append("line")
-            .attr("x1", 0).attr("x2", 0)
-            .attr("y1", 0).attr("y2", this.height)
-            .style("opacity", 0);
+                            .append("line")
+                            .attr("x1", 0).attr("x2", 0)
+                            .attr("y1", 0).attr("y2", this.height)
+                            .style("opacity", 0);
 
 
-        // Fokus-text
 
     },
 
@@ -212,19 +211,6 @@ export default {
         stroke: black;
     }
 
-    .mouse-line {
-        stroke: black;
-        stroke-width: 1px;
-        opacity: 0;
-    }
-
-    .mouse-cirlce {
-        stroke: black;
-        fill: none;
-        stroke-width: 1px;
-        opacity: 0;
-    }
-
     .listening-rect {
         fill: transparent;
     }
@@ -235,18 +221,25 @@ export default {
         fill: none;
 
     }
-    .tooltip {
-        fill: white;
-    }
-    .tooltipx {
-        color: black;
-    }
+
     #hovertext {
         display: none;
         position: absolute;
         padding: 0.1em;
         background-color: rgba(255,255,255,0.8);
         border: 1px solid black;
+    }
+    .dataparagraph {
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-top:0;
+        margin-bottom:0;
+    }
+    .date {
+        padding-top: 0;
+        margin-top:  0;
+        margin-bottom: 0;
+        padding-bottom: 0.2em;
     }
 
 </style>
