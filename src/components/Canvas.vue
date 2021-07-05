@@ -5,7 +5,7 @@
 
         </div>
         <div id="hovertext" :style="styleObject">
-            <p class="date">{{mouseindex}}:</p>
+            <p class="date">{{formatDate(dates[mouseindex])}}:</p>
             <p  v-for="(list, i) in numberstoshow"
                 :key="i"
                 :style="{color: colors[i]}"
@@ -25,7 +25,8 @@ export default {
     props: {
         words: Array,
         numberstoshow: Array,
-        colors: Array
+        colors: Array,
+        dates: Array
     },
 
     data() {
@@ -41,6 +42,8 @@ export default {
 
             yaxis: null,
             xaxis: null,
+            xticks: [],
+            xticklabels: [],
 
             linegenerator: null,
 
@@ -82,7 +85,9 @@ export default {
             //this.xs = Array.from(Array(this.numberstoshow[0].length).keys())
 
             this.yaxis = d3.axisLeft().scale(this.yScale); 
-            this.xaxis = d3.axisBottom().scale(this.xScale);
+            this.xaxis = d3.axisBottom().scale(this.xScale)
+                            .tickValues(this.getTickValues())
+                            .tickFormat(d => this.formatDate(this.dates[d]));
 
             this.svg.append("g")
                 .attr("class", "axis")
@@ -113,6 +118,10 @@ export default {
         getY(p) {
             return this.yScale(p);
         },
+        formatDate(d) {
+            let f =  d3.timeFormat("%b %Y");
+            return f(d);
+        },
 
         onMouseMove(event) {
             let mousePosition = d3.pointer(event),
@@ -140,6 +149,17 @@ export default {
         around(n) {
             let f = d3.format(".2f");
             return f(n);
+        },
+        getTickValues() {
+            if (this.xticks.length > 0) return this.xticks;
+            let month = 6;
+            let result = [];
+            for (let i = 0; i<this.numberstoshow[0].length; i++) {
+                if (!(month % 6)) result.push(i);
+                month++;
+            }
+            this.xticks = result;
+            return result;
         }
 
 

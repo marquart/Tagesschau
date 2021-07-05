@@ -4,7 +4,7 @@
     <SearchBar :words="words"  @add="addWord"/>
     <div v-if="showerror" class="errormsg" @click="hideError">{{errorstring}}</div>
     <Selection :words="wordstoshow" :colors="colors" @delete="deleteWordFromIndex"/>
-    <Canvas :words="wordstoshow" :numberstoshow="numberstoshow" :colors="colors"/>
+    <Canvas :words="wordstoshow" :numberstoshow="numberstoshow" :colors="colors" :dates="dates"/>
   </div>
 </template>
 
@@ -32,6 +32,7 @@ export default {
         words: [],
         wordstoshow: [],
         numberstoshow: [],
+        dates: [],
         showerror: false,
         errorstring: ""
       }
@@ -50,7 +51,23 @@ export default {
           .then(data => this.numbers = data);
 
         this.words = Object.keys(this.numbers);
+
+        this.fillDates();
         return result;
+      },
+
+      fillDates() {
+        let year = 2014,
+            month = 5;
+        for (let i = 0; i<this.numbers['merkel'].length; i++) {
+          if (month > 12) {
+            month = 1;
+            year++;
+          }
+          this.dates.push(new Date(year, month));
+          month++;
+          
+        }
       },
 
       addWord(newWord) {
