@@ -116,6 +116,9 @@ export default {
   body, html {
     background-image: linear-gradient(to bottom right, rgb(255, 255, 255),  rgb(220, 220, 220));
     background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center; 
     margin: 0;
     height: 100%;
   }

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>{{generateArc}}</h2>
+        <h2>{{title}}</h2>
         <div v-show="datapresent" id="canvas">
 
         </div>
@@ -99,7 +99,6 @@ export default {
                 .call(this.yaxis);
 
 
-
             this.numberstoshow.forEach((element, i) => {
                 //console.log(element);
                 this.svg.append("path")
@@ -119,8 +118,7 @@ export default {
             return this.yScale(p);
         },
         formatDate(d) {
-            let f =  d3.timeFormat("%b %Y");
-            return f(d);
+            return  d3.timeFormat("%b %Y")(d);
         },
 
         onMouseMove(event) {
@@ -147,8 +145,7 @@ export default {
             this.styleObject['display'] = 'none';
         },
         around(n) {
-            let f = d3.format(".2f");
-            return f(n);
+            return d3.format(".2f")(n);
         },
         getTickValues() {
             if (this.xticks.length > 0) return this.xticks;
@@ -167,8 +164,8 @@ export default {
 
     },
     computed: {
-        generateArc() {
-            if (this.numberstoshow.length>0) return "Keyword Density Plot";
+        title() {
+            if (this.numberstoshow.length>0) return "Keyword Density Plot in ‰";
             return "Zum anzeigen des Keyword Density Plots bitte ein Keyword suchen.";
         }
     },
