@@ -35,10 +35,6 @@ export default {
 
     },
     computed: {
-        showWords() {
-            //return this.words;
-            return Array.from(this.words).join(', ');
-        }
     },
 
     mounted() {

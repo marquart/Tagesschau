@@ -127,8 +127,8 @@ export default {
                 x = this.xScale.invert(mousePosition[0]),
                 i = Math.round(x);
             this.hoverline
-                .attr("transform", "translate(" + this.xScale(i) + "," + 0 + ")")
-                .style("opacity", '1');
+                .attr("transform", "translate(" + this.xScale(i) + ",0)")
+                .style("opacity", 1);
 
             //this.fokustext
             //    .attr("transform", "translate(" + this.xScale(i) + "," + this.yScale(this.numberstoshow[0][i]) + ")")
@@ -136,7 +136,7 @@ export default {
             //this.fokustext.select(".tooltipx").text(i + ":");
             //this.fokustext.select(".tooltipys").text(this.getValuesAtIndex(i));
             this.mouseindex = i;
-            if (i>78) this.styleObject['left'] = (event.pageX-100) + 'px';
+            if (i>77) this.styleObject['left'] = (event.pageX-100) + 'px';
             else this.styleObject['left'] = (event.pageX+20) + 'px';
             this.styleObject['top'] = event.pageY + "px";
             this.styleObject['display'] = 'block';
