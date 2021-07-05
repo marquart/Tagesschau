@@ -55,7 +55,7 @@ export default {
             this.searchString = '';
         },
         * filterWords() {
-            let maxSize = 30;
+            let maxSize = 80;
             if (maxSize > this.words.length) {
                 maxSize = this.words.length;
             }

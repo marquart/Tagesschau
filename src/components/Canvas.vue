@@ -172,13 +172,13 @@ export default {
 
     mounted() {
         this.width = window.innerWidth - 2*this.margin;
-        this.height = window.innerHeight  - 5*this.margin;
+        this.height = window.innerHeight  - 10*this.margin;
 
         this.svg = d3
             .select("#canvas")
             .append("svg")
             .attr("width", this.width+2*this.margin)
-            .attr("height", this.height+5*this.margin)
+            .attr("height", this.height+10*this.margin)
             .append('g')
             .attr("transform", "translate(" + this.margin + "," + this.margin + ")");
 
@@ -218,6 +218,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+
+
     .axis {
         font-family: inherit;
         font-size: inherit;

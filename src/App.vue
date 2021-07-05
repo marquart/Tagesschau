@@ -114,11 +114,9 @@ export default {
   @import url('https://fonts.googleapis.com/css?family=Barlow');
 
   body, html {
-    background-image: linear-gradient(to bottom right, rgb(255, 255, 255),  rgb(220, 220, 220));
+    background: linear-gradient(to bottom right, rgb(255, 255, 255),  rgb(220, 220, 220));
     background-attachment: fixed;
     background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center; 
     margin: 0;
     height: 100%;
   }
@@ -128,7 +126,6 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    background-image: linear-gradient(to bottom right, rgb(255, 255, 255),  rgb(220, 220, 220));
     margin: 0;
     height: 100%;
   }
