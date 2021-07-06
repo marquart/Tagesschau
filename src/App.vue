@@ -3,8 +3,8 @@
     <h1>Tagesschau</h1>
     <SearchBar :words="words"  @add="addWord"/>
     <div v-if="showerror" class="errormsg" @click="hideError">{{errorstring}}</div>
-    <Selection :words="wordstoshow" :colors="colors" @delete="deleteWordFromIndex"/>
-    <Canvas :words="wordstoshow" :numberstoshow="numberstoshow" :colors="colors" :dates="dates"/>
+    <Selection :words="selectedWords" :colors="colors" @delete="deleteWordFromIndex"/>
+    <Canvas :selectedNumbers="selectedNumbers" :colors="colors" :dates="dates"/>
   </div>
 </template>
 
@@ -30,8 +30,8 @@ export default {
         colors : ["#56ae6c","#9350a1","#697cd4","#ba496b","#53b3b6"],
         numbers: {},
         words: [],
-        wordstoshow: [],
-        numberstoshow: [],
+        selectedWords: [],
+        selectedNumbers: [],
         dates: [],
         showerror: false,
         errorstring: ""
@@ -59,7 +59,7 @@ export default {
       fillDates() {
         let year = 2014,
             month = 5;
-        for (let i = 0; i<this.numbers['merkel'].length; i++) {
+        for (let i = 0; i<this.numbers["merkel"].length; i++) {
           if (month > 12) {
             month = 1;
             year++;
@@ -72,12 +72,12 @@ export default {
 
       addWord(newWord) {
 
-        if (this.wordstoshow.length < this.colors.length && !this.wordstoshow.includes(newWord)) {
+        if (this.selectedWords.length < this.colors.length && !this.selectedWords.includes(newWord)) {
           this.hideError();
-          this.numberstoshow.length = 0;
-          this.wordstoshow.push(newWord)
-          this.wordstoshow.forEach(element => {
-            this.numberstoshow.push(this.numbers[element]);
+          this.selectedNumbers.length = 0;
+          this.selectedWords.push(newWord)
+          this.selectedWords.forEach(element => {
+            this.selectedNumbers.push(this.numbers[element]);
           });
         } else {
           this.errorstring = "Bitte wähle höchstens fünf einzigartige Begriffe aus";
@@ -90,10 +90,10 @@ export default {
       },
 
       deleteWordFromIndex(index) {
-        if (index>=0 && index < this.wordstoshow.length) {
+        if (index>=0 && index < this.selectedWords.length) {
           this.hideError();
-          this.wordstoshow.splice(index, 1);
-          this.numberstoshow.splice(index, 1);
+          this.selectedWords.splice(index, 1);
+          this.selectedNumbers.splice(index, 1);
         }
       }
 

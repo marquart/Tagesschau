@@ -4,9 +4,9 @@
         <div v-show="datapresent" id="canvas">
 
         </div>
-        <div id="hovertext" :style="styleObject">
-            <p class="date">{{formatDate(dates[mouseindex])}}:</p>
-            <p  v-for="(list, i) in numberstoshow"
+        <div id="hovertext" :style="hoverTextStyle">
+            <p class="date">{{dateStrings[mouseindex]}}:</p>
+            <p  v-for="(list, i) in selectedNumbers"
                 :key="i"
                 :style="{color: colors[i]}"
                 class="dataparagraph"
@@ -23,14 +23,14 @@ import * as d3 from "d3";
 export default {
     name: 'Canvas',
     props: {
-        words: Array,
-        numberstoshow: Array,
+        selectedNumbers: Array,
         colors: Array,
         dates: Array
     },
 
     data() {
         return {
+            dateStrings: [],
             margin: 50,
             datapresent: false,
             svg: null,
@@ -51,7 +51,7 @@ export default {
             hoverline: null,
 
             mouseindex: 0,
-            styleObject: {
+            hoverTextStyle: {
                 display: 'none',
                 left: 0,
                 top: 0
@@ -62,8 +62,8 @@ export default {
     },
 
     watch: {
-        numberstoshow() {
-            if (this.numberstoshow.length>0) {
+        selectedNumbers() {
+            if (this.selectedNumbers.length>0) {
                 this.datapresent = true;
                 this.draw();
             } else {
@@ -78,16 +78,16 @@ export default {
             this.svg.selectAll("g.axis").remove()
             this.svg.selectAll("path.line").remove()
             
-            this.xScale.domain([0, this.numberstoshow[0].length-1]);
-            this.yScale.domain([0, d3.max(this.numberstoshow, l => d3.max(l, n => n))]);
+            this.xScale.domain([0, this.selectedNumbers[0].length-1]);
+            this.yScale.domain([0, d3.max(this.selectedNumbers, l => d3.max(l, n => n))]);
 
-            //console.log(d3.max(this.numberstoshow, l => d3.max(l, n => n)));
-            //this.xs = Array.from(Array(this.numberstoshow[0].length).keys())
+            //console.log(d3.max(this.selectedNumbers, l => d3.max(l, n => n)));
+            //this.xs = Array.from(Array(this.selectedNumbers[0].length).keys())
 
             this.yaxis = d3.axisLeft().scale(this.yScale); 
             this.xaxis = d3.axisBottom().scale(this.xScale)
                             .tickValues(this.getTickValues())
-                            .tickFormat(d => this.formatDate(this.dates[d]));
+                            .tickFormat(i => this.dateStrings[i]);
 
             this.svg.append("g")
                 .attr("class", "axis")
@@ -99,7 +99,7 @@ export default {
                 .call(this.yaxis);
 
 
-            this.numberstoshow.forEach((element, i) => {
+            this.selectedNumbers.forEach((element, i) => {
                 //console.log(element);
                 this.svg.append("path")
                     .datum(element) // 10. Binds data to the line 
@@ -131,29 +131,30 @@ export default {
                 .style("opacity", 1);
 
             //this.fokustext
-            //    .attr("transform", "translate(" + this.xScale(i) + "," + this.yScale(this.numberstoshow[0][i]) + ")")
+            //    .attr("transform", "translate(" + this.xScale(i) + "," + this.yScale(this.selectedNumbers[0][i]) + ")")
             //    .style("display", "inline");
             //this.fokustext.select(".tooltipx").text(i + ":");
             //this.fokustext.select(".tooltipys").text(this.getValuesAtIndex(i));
             this.mouseindex = i;
-            if (i>77) this.styleObject['left'] = (event.pageX-100) + 'px';
-            else this.styleObject['left'] = (event.pageX+20) + 'px';
-            this.styleObject['top'] = event.pageY + "px";
-            this.styleObject['display'] = 'block';
+            if (i>77) this.hoverTextStyle['left'] = (event.pageX-100) + 'px';
+            else this.hoverTextStyle['left'] = (event.pageX+20) + 'px';
+            this.hoverTextStyle['top'] = event.pageY + "px";
+            this.hoverTextStyle['display'] = 'block';
 
         },
         onMouseLeave() {
             this.hoverline.style("opacity", 0);
-            this.styleObject['display'] = 'none';
+            this.hoverTextStyle['display'] = 'none';
         },
         around(n) {
             return d3.format(".2f")(n);
         },
         getTickValues() {
+            if (this.dateStrings.length != this.dates.length) this.dateStrings = this.dates.map(date => this.formatDate(date));
             if (this.xticks.length > 0) return this.xticks;
             let month = 6;
             let result = [];
-            for (let i = 0; i<this.numberstoshow[0].length; i++) {
+            for (let i = 0; i<this.selectedNumbers[0].length; i++) {
                 if (!(month % 6)) result.push(i);
                 month++;
             }
@@ -167,7 +168,7 @@ export default {
     },
     computed: {
         title() {
-            if (this.numberstoshow.length>0) return "Keyword Density Plot in ‰";
+            if (this.selectedNumbers.length>0) return "Keyword Density Plot in ‰";
             return "Zum anzeigen des Keyword Density Plots bitte ein Keyword suchen.";
         }
     },
@@ -207,8 +208,6 @@ export default {
                             .attr("x1", 0).attr("x2", 0)
                             .attr("y1", 0).attr("y2", this.height)
                             .style("opacity", 0);
-
-
 
     },
 
