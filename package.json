@@ -23,6 +23,9 @@
     "sass-loader": "^10.2.0",
     "vue-template-compiler": "^2.6.11"
   },
+  "vue": {
+    "publicPath": "./"
+  },
   "eslintConfig": {
     "root": true,
     "env": {

@@ -34,8 +34,8 @@ export default {
             margin: 50,
             datapresent: false,
             svg: null,
-            width: 0,
-            height: 0,
+            figureWidth: 0,
+            figureHeight: 0,
 
             xScale: null,
             yScale: null,
@@ -91,7 +91,7 @@ export default {
 
             this.svg.append("g")
                 .attr("class", "axis")
-                .attr("transform", "translate(0," + this.height + ")")
+                .attr("transform", "translate(0," + this.figureHeight + ")")
                 .call(this.xaxis);
 
             this.svg.append("g")
@@ -174,30 +174,30 @@ export default {
     },
 
     mounted() {
-        this.width = window.innerWidth - 2*this.margin;
-        this.height = window.innerHeight  - 10*this.margin;
+        this.figureWidth = window.innerWidth - 2*this.margin;
+        this.figureHeight = window.innerHeight  - 10*this.margin;
 
         this.svg = d3
             .select("#canvas")
             .append("svg")
-            .attr("width", this.width+2*this.margin)
-            .attr("height", this.height+10*this.margin)
+            .attr("width", this.figureWidth+2*this.margin)
+            .attr("height", this.figureHeight+10*this.margin)
             .append('g')
             .attr("transform", "translate(" + this.margin + "," + this.margin + ")");
 
-        this.yScale = d3.scaleLinear().range([this.height, 0]);
-        this.xScale = d3.scaleLinear().range([0, this.width]);
+        this.yScale = d3.scaleLinear().range([this.figureHeight, 0]);
+        this.xScale = d3.scaleLinear().range([0, this.figureWidth]);
 
         this.linegenerator = d3.line()
             .x(this.getX) // set the x values for the line generator
             .y(this.getY) // set the y values for the line generator 
-            .curve(d3.curveMonotoneX) // apply smoothing to the line
+            .curve(d3.curveMonotoneX)//.curve(d3.curveCatmullRom.alpha(0.5)) // apply smoothing to the line
         
         this.listeningRect = this.svg
             .append("rect")
             .attr("class", "listening-rect")
-            .attr("width", this.width)
-            .attr("height", this.height)
+            .attr("width", this.figureWidth)
+            .attr("height", this.figureHeight)
             .on("mousemove", this.onMouseMove)
             .on("mouseleave", this.onMouseLeave);
 
@@ -206,7 +206,7 @@ export default {
         this.hoverline =  hoverlinegroup
                             .append("line")
                             .attr("x1", 0).attr("x2", 0)
-                            .attr("y1", 0).attr("y2", this.height)
+                            .attr("y1", 0).attr("y2", this.figureHeight)
                             .style("opacity", 0);
 
     },
@@ -226,7 +226,7 @@ export default {
         font-size: inherit;
     }
     .line {
-        stroke-width: 2;
+        stroke-width: 2.5;
         fill: none;
         stroke: black;
     }

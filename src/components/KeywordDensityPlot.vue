@@ -1,0 +1,141 @@
+<template>
+  <div id="keyworddensity">
+    <SearchBar :words="words"  @add="addWord"/>
+    <div v-if="showerror" class="errormsg" @click="hideError">{{errorstring}}</div>
+    <Selection :words="selectedWords" :colors="colors" @delete="deleteWordFromIndex"/>
+    <Canvas :selectedNumbers="selectedNumbers" :colors="colors" :dates="dates"/>
+  </div>
+</template>
+
+<script>
+
+import SearchBar from './SearchBar.vue'
+import Canvas from './Canvas.vue'
+import Selection from './Selection.vue'
+
+export default {
+    name: 'KeywordDensityPlot',
+    components: {
+      SearchBar,
+      Selection,
+      Canvas
+    },
+
+    data() {
+      return {
+        colors : ["#56ae6c","#9350a1","#697cd4","#ba496b","#53b3b6"],
+        numbers: {},
+        words: [],
+        selectedWords: [],
+        selectedNumbers: [],
+        dates: [],
+        showerror: false,
+        errorstring: ""
+      }
+    },
+
+    mounted() {
+      this.fetchData();
+    }, 
+
+    methods: {
+
+
+      async fetchData() {
+        let result = await fetch("table.json")
+          .then(response => response.json())
+          .then(data => this.numbers = data);
+
+        this.words = Object.keys(this.numbers);
+
+        this.fillDates();
+        return result;
+      },
+
+      fillDates() {
+        let year = 2014,
+            month = 5;
+        for (let i = 0; i<this.numbers["merkel"].length; i++) {
+          if (month > 12) {
+            month = 1;
+            year++;
+          }
+          this.dates.push(new Date(year, month));
+          month++;
+          
+        }
+      },
+
+      addWord(newWord) {
+
+        if (this.selectedWords.length < this.colors.length && !this.selectedWords.includes(newWord)) {
+          this.hideError();
+          this.selectedNumbers.length = 0;
+          this.selectedWords.push(newWord)
+          this.selectedWords.forEach(element => {
+            this.selectedNumbers.push(this.numbers[element]);
+          });
+        } else {
+          this.errorstring = "Bitte wähle höchstens fünf einzigartige Begriffe aus";
+          this.showerror = true;
+        }
+      },
+
+      hideError() {
+        this.showerror = false;
+      },
+
+      deleteWordFromIndex(index) {
+        if (index>=0 && index < this.selectedWords.length) {
+          this.hideError();
+          this.selectedWords.splice(index, 1);
+          this.selectedNumbers.splice(index, 1);
+        }
+      }
+
+    },
+
+    computed: {
+      
+    },
+
+    destroyed() {
+
+    }
+
+}
+</script>
+
+<style>
+
+
+  #keyworddensity {
+    background: inherit;
+    background-attachment: inherit;
+    background-size: inherit;
+    margin: inherit;
+    height: inherit;
+
+    font-family: inherit;
+    -webkit-font-smoothing: inherit;
+    -moz-osx-font-smoothing: inherit;
+    text-align: inherit;
+    margin: inherit;
+    height: inherit;
+  }
+
+  .errormsg {
+    margin-top: 1em;
+    margin-left: 35%;
+    margin-right: 35%;
+    text-align: center;
+    width: 30%;
+
+    padding: 0.4em;
+    margin-top: 0.8em;
+
+    background-color: #de141b;
+    color: white;
+    border: 2.5px solid white;
+    }
+</style>
