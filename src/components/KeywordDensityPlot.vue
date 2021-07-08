@@ -12,6 +12,7 @@
 import SearchBar from './SearchBar.vue'
 import Canvas from './Canvas.vue'
 import Selection from './Selection.vue'
+import densities from '../../public/table.json'
 
 export default {
     name: 'KeywordDensityPlot',
@@ -35,13 +36,15 @@ export default {
     },
 
     mounted() {
-      this.fetchData();
+      //this.fetchData(); // Um die Daten asynchron von einem Backend zu holen -> rendert die Seite für den Benutzer schneller
+      this.loadData(); // Lädt die Daten aus JS-Skript -> -> rendert die Seite für den Benutzer langsamer, aber kein Backend nötig
     }, 
 
     methods: {
 
 
-      async fetchData() {
+      /*async fetchData() {
+        // Holt die Daten per HTTP von einem Backend
         let result = await fetch("table.json")
           .then(response => response.json())
           .then(data => this.numbers = data);
@@ -50,6 +53,13 @@ export default {
 
         this.fillDates();
         return result;
+      },*/
+
+      loadData() {
+        // Lädt die Daten direkt
+        this.numbers = densities;
+        this.words = Object.keys(this.numbers);
+        this.fillDates();
       },
 
       fillDates() {
