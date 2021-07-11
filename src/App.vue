@@ -49,7 +49,10 @@ export default {
   @import url('https://fonts.googleapis.com/css?family=Barlow');
 
   body, html {
-    background: linear-gradient(to bottom right, rgb(255, 255, 255),  rgb(220, 220, 220));
+    // background: linear-gradient(to bottom right, rgb(255, 255, 255),  rgb(220, 220, 220));
+    background: linear-gradient(to bottom, rgb(1, 69, 150),  rgb(1, 30, 88));
+    // background: #011e58;
+    color: #e9ebf0;
     background-attachment: fixed;
     background-size: cover;
     margin: 0;

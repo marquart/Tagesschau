@@ -51,6 +51,7 @@ export default {
                 //this.results = Array.from(this.filterWords());
                 //this.isOpen = true;
                 this.results = Array.from(this.filterWords());
+                console.log(this.results[0]);
             }
             this.searchString = '';
         },
