@@ -176,6 +176,7 @@ export default {
     mounted() {
         this.figureWidth = window.innerWidth - this.margin;
         this.figureHeight = window.innerHeight  - 2*this.margin;
+        if (this.figureHeight<0) this.figureHeight = 0;
 
         this.svg = d3
             .select("#canvas")
