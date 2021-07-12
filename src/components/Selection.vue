@@ -30,7 +30,7 @@ export default {
             this.$emit('delete', index)
         },
         setColor(index) {
-            return {"color": this.colors[index], "border-color": this.colors[index]}
+            return {"background-color": this.colors[index]}//{"color": this.colors[index], "border-color": this.colors[index]}
         }
 
     },
@@ -61,12 +61,15 @@ export default {
         display: inline;
         padding: 0.4em;
         margin: 0.3em;
-        border: 2.5px solid #000000;
+        border: 3px solid white;
+        background-color: #f1f1f1;
+        color: black;
+        
     }
     .card:hover {
-        background-color: #de141b;
+        background-color: #de141b !important;
         color: white !important;
-        border-color: white !important;
+        /*border-color: white !important;*/
         cursor: pointer;
     }
 </style>

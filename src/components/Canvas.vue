@@ -8,7 +8,7 @@
             <p class="date">{{dateStrings[mouseindex]}}:</p>
             <p  v-for="(list, i) in selectedNumbers"
                 :key="i"
-                :style="{color: colors[i]}"
+                :style="{'border-color': colors[i]}"
                 class="dataparagraph"
             >
             {{around(list[mouseindex])}}
@@ -31,7 +31,7 @@ export default {
     data() {
         return {
             dateStrings: [],
-            margin: 50,
+            margin: window.innerWidth*0.15,//50,
             datapresent: false,
             svg: null,
             figureWidth: 0,
@@ -174,16 +174,16 @@ export default {
     },
 
     mounted() {
-        this.figureWidth = window.innerWidth - 2*this.margin;
-        this.figureHeight = window.innerHeight  - 10*this.margin;
+        this.figureWidth = window.innerWidth - this.margin;
+        this.figureHeight = window.innerHeight  - 2*this.margin;
 
         this.svg = d3
             .select("#canvas")
             .append("svg")
-            .attr("width", this.figureWidth+2*this.margin)
-            .attr("height", this.figureHeight+10*this.margin)
+            .attr("width", this.figureWidth+this.margin)
+            .attr("height", this.figureHeight+2*this.margin)
             .append('g')
-            .attr("transform", "translate(" + this.margin + "," + this.margin + ")");
+            .attr("transform", "translate(" + this.margin/2 + ",0)");
 
         this.yScale = d3.scaleLinear().range([this.figureHeight, 0]);
         this.xScale = d3.scaleLinear().range([0, this.figureWidth]);
@@ -226,9 +226,9 @@ export default {
         font-size: inherit;
     }
     .line {
-        stroke-width: 2.5;
+        stroke-width: 3;
         fill: none;
-        stroke: black;
+        stroke: white;
     }
 
     .listening-rect {
@@ -236,8 +236,8 @@ export default {
     }
 
     .hoverline {
-        stroke-width: 1px;
-        stroke: black;
+        stroke-width: 2px;
+        stroke: white;
         fill: none;
 
     }
@@ -246,20 +246,26 @@ export default {
         display: none;
         position: absolute;
         padding: 0.1em;
-        background-color: rgba(255,255,255,0.8);
+        background-color: rgba(255,255,255,0.86);
         border: 1px solid black;
     }
     .dataparagraph {
-        padding-top: 0;
-        padding-bottom: 0;
-        margin-top:0;
+        /*padding-top: 0;
+        padding-bottom: 0;*/
+        padding: 0.05em;
+        border: 4px solid black;
+        margin-top:1px;
         margin-bottom:0;
+        color: black;
     }
     .date {
         padding-top: 0;
         margin-top:  0;
         margin-bottom: 0;
-        padding-bottom: 0.2em;
+        margin-left: 0.2em;
+        margin-right: 0.2em;
+        padding-bottom: 0em;
+        color: black;
     }
 
 </style>

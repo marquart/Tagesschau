@@ -24,7 +24,7 @@ export default {
 
     data() {
       return {
-        colors : ["#56ae6c","#9350a1","#697cd4","#ba496b","#53b3b6"],
+        colors : ['#00ced1','#ffa500','#0ac40a', '#911eb4', '#ff1493'], //['rgb(146,255,183)','rgb(249,136,255)','rgb(178,210,255)','rgb(255,124,181)','rgb(141,255,255)'], //["#9affc2","#9350a1","#697cd4","#ba496b","#53b3b6"],
         numbers: {},
         words: [],
         selectedWords: [],

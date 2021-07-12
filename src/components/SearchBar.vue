@@ -97,8 +97,8 @@ export default {
 
     .autocomplete {
     padding: 0.7em;
-    box-shadow: 0.5em 0.4em #5a5a5a;
-    background-color: #dcdcdc;
+    /*box-shadow: 0.5em 0.4em #5a5a5a;*/
+    background-color: #f1f1f1; /*#dcdcdc;*/
     box-sizing: border-box;
 
     }
@@ -126,11 +126,12 @@ export default {
     .autocomplete-results {
     padding: 0;
     margin: 0;
-    border: 1px solid #eeeeee;
+    /*border: 1px solid #eeeeee;*/
     height: 8em;
     min-height: 1em;
     max-height: 18em;
     overflow: auto;
+    color: black;
     }
 
     .autocomplete-result {
@@ -141,7 +142,7 @@ export default {
     }
 
     .autocomplete-result:hover {
-    background-color: #4AAE9B;
+    background-color:  rgb(1, 69, 150); /*#4AAE9B;*/
     color: white;
     }
 </style>
