@@ -2,7 +2,7 @@
     "env": {
         "browser": true
     },
-    "extends": "plugin:vue/essential",
+    "extends": "plugin:vue/base",
     "parser" : "babel-eslint",
     "parserOptions": {
         "ecmaVersion": 2015,
