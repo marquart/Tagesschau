@@ -5,6 +5,11 @@
 npm install
 ```
 
+### Install babel-eslint parser
+```
+npm install babel-eslint --save-dev
+```
+
 ### Compiles and hot-reloads for development
 ```
 npm run serve
