@@ -2,7 +2,7 @@
   <div id="app">
     <h1>Tagesschau</h1>
     <KeywordDensityPlot />
-    <!--<NamedEntitiesMap />-->
+    <NamedEntitiesMap />
   </div>
 </template>
 
@@ -12,13 +12,13 @@
 // npm install d3
 
 import KeywordDensityPlot from './components/KeywordDensityPlot.vue'
-//import NamedEntitiesMap from './components/NamedEntitiesMap.vue'
+import NamedEntitiesMap from './components/NamedEntitiesMap.vue'
 
 export default {
     name: 'App',
     components: {
       KeywordDensityPlot,
-      //NamedEntitiesMap,
+      NamedEntitiesMap,
     },
 
     data() {
