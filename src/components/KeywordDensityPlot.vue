@@ -124,14 +124,14 @@ export default {
     background-attachment: inherit;
     background-size: inherit;
     margin: inherit;
-    height: inherit;
+
 
     font-family: inherit;
     -webkit-font-smoothing: inherit;
     -moz-osx-font-smoothing: inherit;
     text-align: inherit;
     margin: inherit;
-    height: inherit;
+
   }
 
   .errormsg {

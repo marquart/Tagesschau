@@ -182,7 +182,7 @@ export default {
             .select("#canvas")
             .append("svg")
             .attr("width", this.figureWidth+this.margin)
-            .attr("height", this.figureHeight+2*this.margin)
+            .attr("height", this.figureHeight+this.margin/3)
             .append('g')
             .attr("transform", "translate(" + this.margin/2 + ",0)");
 
@@ -220,7 +220,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-
 
     .axis {
         font-family: inherit;

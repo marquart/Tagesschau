@@ -3,8 +3,9 @@
         "browser": true
     },
     "extends": "plugin:vue/base",
-    "parser" : "babel-eslint",
+    "parser": "vue-eslint-parser",
     "parserOptions": {
+        "parser": "babel-eslint",
         "ecmaVersion": 2015,
         "sourceType": "module"
     },
