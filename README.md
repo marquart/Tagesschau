@@ -1,13 +1,13 @@
 # app
 
-## Project setup
-```
-npm install
-```
-
 ### Install babel-eslint parser
 ```
 npm install babel-eslint --save-dev
+```
+
+## Project setup
+```
+npm install
 ```
 
 ### Compiles and hot-reloads for development
