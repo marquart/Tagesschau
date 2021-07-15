@@ -6,7 +6,7 @@
     <l-map 
     :center="center" 
     :zoom="2"
-    :minZoom="2"
+    :minZoom="1"
     :maxZoom="5" 
     :options="mapOptions"
     style="height: 700px; 
@@ -15,6 +15,7 @@
             border-color: black;
             border-width: 5px;
             border-style: solid">
+      <l-control-zoom position="bottomright" maxZoom="1"></l-control-zoom>
       <l-choropleth-layer 
       @activeState = "updateActiveState"
       :data="nerData" 
@@ -59,7 +60,7 @@ import ReferenceChart from './ReferenceChart'
 import ChoroplethLayer from './ChoroplethLayer'
 import worldGeojson from '../../public/world.geo.json'
 import { nerData } from '../../public/ner'
-import {LMap} from 'vue2-leaflet'
+import {LMap, LControlZoom} from 'vue2-leaflet'
 import Slider from './Slider.vue'
 import LinePlot from './LinePlot.vue'
 
@@ -67,6 +68,7 @@ export default {
   name: "NamedEntitiesMap",
   components: { 
     LMap,
+    LControlZoom,
     'l-info-control': InfoControl, 
     'l-reference-chart': ReferenceChart, 
     'l-choropleth-layer': ChoroplethLayer,
@@ -77,9 +79,12 @@ export default {
     return {
       nerData,
       worldGeojson,
-      colorScale: ["#f2f8fc", "#00256e"],
-      center: [38, 13],
+      
       monthIndex: "0",
+
+      colorScale: ["#f2f8fc", "#00256e"],
+      //center: [38, 13],
+      center: [42, 20],
       currentStrokeWidth: 3, 
       activeState: "",
       value: {
@@ -92,6 +97,8 @@ export default {
       }],
       mapOptions: {
         attributionControl: false,
+        zoomControl: false,
+        zoomSnap: 0.4,
       },
     }
   },
@@ -121,8 +128,10 @@ export default {
 
     updateActiveState(activeState){
       this.activeState = activeState
-    }
- }
+    },
+
+    
+  }
 } 
 
 </script> 
@@ -131,5 +140,9 @@ export default {
     height: 90%;
     width: 90%; 
     margin:0px auto;
+    font-family: 'PT Sans','Barlow', Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: inherit;
     }
 </style>

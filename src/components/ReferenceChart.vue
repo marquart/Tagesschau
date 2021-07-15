@@ -1,5 +1,5 @@
 <template>
-    
+
 </template>
 <script>
 import chroma from "chroma-js"
@@ -81,6 +81,7 @@ export default {
 }
 </script>
 <style>
+
 .info.legend span {
   display: block;
 }

@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div id="choropleth">
+    <p v-if="gesamt"><b>Gesamt</b></p>
+    <p v-else><b>{{dates[monthIndex]}}</b></p>
     <l-geo-json :key="start"
                 :geojson="geojsonData.geojson" 
                 :options="geojsonOptions" 
@@ -82,7 +84,6 @@ export default {
   props: {
     monthIndex: String,
     start: true,
-    // month: String,
     geojson: Object,
     data: Array,
     center: Array,
@@ -100,16 +101,14 @@ export default {
     strokeWidth: {type: Number, default: 2},
     currentStrokeWidth: {type: Number, default: 5}
   },
-  mounted() {
-    if (this.$parent._isMounted) {
-      this.deferredMountedTo(this.$parent.mapObject)
-    }
-  },
+
   data() {
     return {
       currentItem: { name: "", value: 0 },
       activeState: "",
       fillOpacity: 0.75,
+      dates: {},
+      gesamt : true,
       geojsonOptions: {
         style: feature => {
           let itemGeoJSONID = feature.properties[this.geojsonIdKey]
@@ -206,8 +205,55 @@ export default {
         }
       }
       this.monthIndex = '0'
-      this.month = '0'
+    },
+
+
+    fillDates() {
+        let year = 2014;
+        let month = 4;
+        let months = ["Jan", "Feb", "Mar", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
+        for (var i = 0; i < 85; i++){
+          let out = "";
+          month += 1;
+          if (month > 12){
+            month = 1;
+            year += 1;
+          }
+          if (i == 0){
+            out = "Gesamt";
+          } else {
+            out = months[month-1] + " " + new String(year);
+          }
+          let j = new String(i);
+          this.dates[j] = out;
+        }
+    },
+  },
+
+    mounted() {
+    console.log(this.gesamt);
+    if (this.$parent._isMounted) {
+      this.deferredMountedTo(this.$parent.mapObject)
     }
-  }
+    this.fillDates();
+    this.gesamt = false;
+
+  },
 }
 </script>
+
+<style>
+#choropleth {
+    height: 90%;
+    width: 90%; 
+    margin:0px auto;
+    font-family: 'PT Sans','Barlow', Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: left;
+    color: white;
+    margin-top: 1%;
+    margin-left: 3%;
+    font-size:18px;
+    }
+</style>
