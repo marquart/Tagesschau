@@ -1,7 +1,7 @@
 <template>
   <div id="map">
     <h2 style="margin-bottom:2em;">Karte zur außenpolitischen Berichterstattung</h2>
-    <Slider @newMonth="updateMap"/>
+    <Slider @newMonth="updateMap" :monthIndex="monthIndex"/>
     <l-map 
     :center="center" :zoom="2" :minZoom="1" :maxZoom="5" :options="mapOptions"
     style="height: 600px; background-color: #011e58; color:#000000; border-color: black; border-width: 5px; border-style: solid; font-family: 'PT Sans','Barlow', Helvetica, sans-serif;
@@ -83,7 +83,7 @@ export default {
       this.monthIndex = monthIndex
     },
     sendPlotPosition(plotpos) {
-      this.monthIndex = plotpos+1;
+      this.monthIndex = String(plotpos+1);
       this.updateMap(this.monthIndex);
     },
 

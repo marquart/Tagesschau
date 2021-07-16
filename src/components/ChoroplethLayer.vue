@@ -42,7 +42,6 @@ function click({target}) {
 export default {
   props: {
     monthIndex: String,
-    plotposition: Number,
     geojson: Object,
     data: Array,
     center: Array,
@@ -122,10 +121,6 @@ export default {
   watch: {
     activeState() {
         this.$emit('activeState', this.activeState);
-    },
-    plotposition() {
-      console.log(this.plotposition);
-      //this.monthIndex = this.poltposition;
     }
   },
 
@@ -158,7 +153,7 @@ export default {
           this.$children[i].deferredMountedTo(parent)
         }
       }
-      this.monthIndex = '0'
+      this.monthIndex = "0"
     }
   },
 
