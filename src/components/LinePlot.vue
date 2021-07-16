@@ -27,10 +27,10 @@ export default {
       values: [],
       svg: null,
       margin: window.innerWidth*0.1,
-
+      poltposition : 0,
       figureWidth: 0,
       figureHeight: 0,
-
+      plotposition: 0,
       xScale: null,
       yScale: null,
 
@@ -75,10 +75,11 @@ export default {
       this.svg.selectAll("path.line").remove()
       
       this.xScale.domain([0, this.dates_array.length]);
-      this.yScale.domain([0, 8.5]);
+      this.yScale.domain([0, 5.56]);
       //this.yScale.domain([0, d3.max(this.selectedNumbers, l => d3.max(l, n => n))]);
 
-      this.yaxis = d3.axisLeft().scale(this.yScale); 
+      this.yaxis = d3.axisLeft().scale(this.yScale)
+                      .ticks(5)
       this.xaxis = d3.axisBottom().scale(this.xScale)
                       .tickValues(this.getTickValues())
                       .tickFormat(i => this.dates_array[i]);
@@ -114,6 +115,7 @@ export default {
         let mousePosition = d3.pointer(event),
             x = this.xScale.invert(mousePosition[0]),
             i = Math.round(x);
+        
         this.hoverline
             .attr("transform", "translate(" + this.xScale(i) + ",0)")
             .style("opacity", 1);
@@ -128,6 +130,12 @@ export default {
     onMouseLeave() {
         this.hoverline.style("opacity", 0);
         this.hoverTextStyle['display'] = 'none';
+    },
+
+    onMouseClick() {
+      this.plotposition = this.mouseindex;
+      this.$emit('plotPosition', this.plotposition);
+
     },
 
     around(n) {
@@ -199,7 +207,8 @@ export default {
         .attr("width", this.figureWidth)
         .attr("height", this.figureHeight)
         .on("mousemove", this.onMouseMove)
-        .on("mouseleave", this.onMouseLeave);
+        .on("mouseleave", this.onMouseLeave)
+        .on("click", this.onMouseClick);
 
     let hoverlinegroup = this.svg.append("g").attr("class", "hoverline");
 

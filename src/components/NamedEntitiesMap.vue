@@ -10,7 +10,7 @@
       <p v-if="dates" style="margin-top: 560px; margin-right: 15px; text-align: right; font-size:18px; color:#fff"><b>{{dates[monthIndex]}}</b></p>
       <p v-else style="margin-top: 560px; margin-right: 15px; text-align: right; font-size:18px; color:#fff"><b>Gesamt</b></p>
       <l-choropleth-layer @activeState = "updateActiveState" :data="nerData" titleKey="state_name" idKey="state_id" :value="value" :extraValues="extraValues" :monthIndex="monthIndex"
-        geojsonIdKey="NAME" :geojson="worldGeojson" 
+        geojsonIdKey="NAME" :geojson="worldGeojson"
         :colorScale="colorScale" :strokeWidth="1" strokeColor="ffffff" :currentStrokeWidth="currentStrokeWidth" currentStrokeColor = "f5d81b">
         <template slot-scope="props">
           <l-info-control :item="props.currentItem" :unit="props.unit" title=" " placeholder="Staat auswählen" :monthIndex="monthIndex" :nerData="nerData" :activeState="activeState"/>
@@ -18,7 +18,7 @@
         </template>
       </l-choropleth-layer>
     </l-map>
-  <LinePlot :activeState="activeState" :nerData="nerData"/>
+  <LinePlot @plotPosition="sendPlotPosition":activeState="activeState" :nerData="nerData"/>
   </div>
 </template>
 
@@ -45,7 +45,6 @@ export default {
   },
   data() {
     return {
-      gesamt: false,
       nerData,
       worldGeojson,
       dates: {},
@@ -82,6 +81,10 @@ export default {
         this.extraValues[0].key = 'coocc' + monthIndex;
       }
       this.monthIndex = monthIndex
+    },
+    sendPlotPosition(plotpos) {
+      this.monthIndex = plotpos+1;
+      this.updateMap(this.monthIndex);
     },
 
     updateActiveState(activeState){
