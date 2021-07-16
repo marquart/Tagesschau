@@ -1,18 +1,18 @@
 <template>
     <div>
-        <h2>{{title}}</h2>
+        <h3>{{title}}</h3>
         <div v-show="datapresent" id="canvas">
 
         </div>
         <div id="hovertext" :style="hoverTextStyle">
-            <p class="date">{{dateStrings[mouseindex]}}:</p>
-            <p  v-for="(list, i) in selectedNumbers"
+            <div class="date">{{dateStrings[mouseindex]}}:</div>
+            <div  v-for="(list, i) in selectedNumbers"
                 :key="i"
                 :style="{'border-color': colors[i]}"
                 class="dataparagraph"
             >
             {{around(list[mouseindex])}}
-            </p>
+            </div>
         </div>
     </div>
 </template>
@@ -168,8 +168,8 @@ export default {
     },
     computed: {
         title() {
-            if (this.selectedNumbers.length>0) return "Keyword Density Plot in ‰";
-            return "Zum anzeigen des Keyword Density Plots bitte ein Keyword suchen.";
+            if (this.selectedNumbers.length>0) return "Wortdichte in ‰";
+            return "Zum anzeigen der Wortdichte bitte einen Begriff suchen.";
         }
     },
 
