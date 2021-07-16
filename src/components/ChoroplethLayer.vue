@@ -1,20 +1,7 @@
 <template>
-  <div>
-    <l-geo-json :key="start"
-                :geojson="geojsonData.geojson" 
-                :options="geojsonOptions" 
-                ref="geolayer"
-                :visible="start === true"></l-geo-json>
-    <l-geo-json :key="monthIndex"
-                :geojson="geojsonData.geojson" 
-                :options="geojsonOptions" 
-                ref="geolayer"
-                :visible="monthIndex === monthIndex"></l-geo-json>
-    <slot :currentItem="currentItem" 
-          :unit="value.metric" 
-          :min="min" 
-          :max="max"
-          ></slot>
+  <div id="choroplethLayer">
+    <l-geo-json :key="monthIndex" :geojson="geojsonData.geojson" :options="geojsonOptions" ref="geolayer" :visible="monthIndex === monthIndex"></l-geo-json>
+    <slot :unit="value.metric" :min="min" :max="max" ></slot>
   </div>
 </template>
 <script>
@@ -22,13 +9,23 @@
 import {LGeoJson} from "vue2-leaflet"
 import { getMin, getMax, normalizeValue, getColor, validNumber } from "../util"
 
-function mouseover({ target }) {
+
+function click({target}) {
+
+  if (this.oldtarget) {
+    this.oldtarget.setStyle({
+      weight: this.strokeWidth,
+      color: this.colorScale[0],
+    })
+  }
+  this.oldtarget = target;
+
   target.setStyle({
     weight: this.currentStrokeWidth,
     color: `#${this.currentStrokeColor}`,
     dashArray: "" 
   })
-
+  
   if (!L.Browser.ie && !L.Browser.opera) {
     target.bringToFront()
   } 
@@ -37,52 +34,14 @@ function mouseover({ target }) {
   let item = this.geojsonData.data.find(
     x => x[this.idKey] == geojsonItem[this.geojsonIdKey]
   )
-  if (!item) {
-    this.currentItem = { name: "", value: 0 }
-    return
+  if (item){
+    this.activeState = item[this.titleKey]
   }
-
-  let tempItem = { name: item[this.titleKey], value: item[this.value.key] }
-  if (this.extraValues) {
-    let tempValues = []
-    for (let x of this.extraValues) {
-      tempValues.push({
-        value: item[x.key],
-        metric: x.metric
-      })
-    }
-    tempItem = { ...tempItem, extraValues: tempValues }
-  }
-  this.currentItem = tempItem
 }
-
-
-function click({ target }) {
-  
-  let geojsonItem = target.feature.properties
-  let item2 = this.geojsonData.data.find(
-    x => x[this.idKey] == geojsonItem[this.geojsonIdKey]
-  ) 
-  if (item2) {
-    this.activeState = item2[this.titleKey]
-  } 
-
-}
-
-function mouseout({ target }) {
-  target.setStyle({
-    weight: this.strokeWidth,
-    color: this.colorScale[0],
-  })
-  this.currentItem = { name: "", value: 0 }
-}
-
 
 export default {
   props: {
     monthIndex: String,
-    start: true,
-    // month: String,
     geojson: Object,
     data: Array,
     center: Array,
@@ -100,16 +59,11 @@ export default {
     strokeWidth: {type: Number, default: 2},
     currentStrokeWidth: {type: Number, default: 5}
   },
-  mounted() {
-    if (this.$parent._isMounted) {
-      this.deferredMountedTo(this.$parent.mapObject)
-    }
-  },
   data() {
     return {
-      currentItem: { name: "", value: 0 },
       activeState: "",
       fillOpacity: 0.75,
+      oldtarget: false,
       geojsonOptions: {
         style: feature => {
           let itemGeoJSONID = feature.properties[this.geojsonIdKey]
@@ -140,7 +94,7 @@ export default {
             fillOpacity: this.fillOpacity
             }
           }
-        
+
           const { min, max } = this
  
           return {
@@ -152,10 +106,11 @@ export default {
             fillOpacity: this.fillOpacity
           }
         },
+
         onEachFeature: (feature, layer) => {
           layer.on({
-            mouseover: mouseover.bind(this),
-            mouseout: mouseout.bind(this),
+            //mouseover: mouseover.bind(this),
+            //mouseout: mouseout.bind(this),
             click: click.bind(this)
           })
         }
@@ -164,15 +119,9 @@ export default {
   },
 
   watch: {
-      activeState() {
-          this.$emit('activeState', this.activeState);
-      },
-      
-      /*
-      monthIndex() {
-          this.month = this.monthIndex
-          console.log("Click");
-      } */
+    activeState() {
+        this.$emit('activeState', this.activeState);
+    }
   },
 
   computed: {
@@ -181,7 +130,7 @@ export default {
     },
     max() {
       if (this.monthIndex == 0) {
-        return (150)
+        return (200)
       } else {
         return (3)
         //return getMax(this.geojsonData.data, this.value.key)
@@ -197,7 +146,6 @@ export default {
   },
 
   methods: {
-
     deferredMountedTo(parent) {
       this.parent = parent
       for (var i = 0; i < this.$children.length; i++) {
@@ -206,8 +154,27 @@ export default {
         }
       }
       this.monthIndex = '0'
-      this.month = '0'
+    }
+  },
+
+  mounted() {
+  if (this.$parent._isMounted) {
+    this.deferredMountedTo(this.$parent.mapObject)
     }
   }
 }
 </script>
+
+
+<style>
+#choroplethLayer {
+    font-family: 'PT Sans','Barlow', Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: right;
+    color: white;
+    margin-top: 34%;
+    margin-right: 3%;
+    font-size:18px;
+    }
+</style>

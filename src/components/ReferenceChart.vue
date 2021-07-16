@@ -1,10 +1,10 @@
 <template>
-    
 </template>
+
 <script>
 import chroma from "chroma-js"
-
 import {validNumber} from "../util"
+
 export default {
   props: {
     colorScale: null,
@@ -16,11 +16,13 @@ export default {
       default: "topright"
     }
   },
+
   mounted() {
     const { colorScale, title, min, max, position } = this
     this.mapObject = L.control({
       position: position
     })
+
     this.mapObject.onAdd = function(map) {
       this._div = L.DomUtil.create("div", "info") // create a div with a class "info"
       this.update({min, max, colorScale, title})
@@ -59,12 +61,14 @@ export default {
       this.deferredMountedTo(this.$parent.mapObject)
     }
   },
+
   methods: {
     deferredMountedTo(parent) {
       this.parent = parent
       this.mapObject.addTo(parent)
     }
   },
+
   watch: {
     min() {
       this.mapObject.update(this);
@@ -73,6 +77,7 @@ export default {
       this.mapObject.update(this);
     },
   },
+
   beforeDestroy() {
     if (this.parent) {
       this.parent.removeControl(this.mapObject)
@@ -80,7 +85,17 @@ export default {
   }
 }
 </script>
+
 <style>
+
+.info{
+  font-family: 'PT Sans','Barlow', Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 95%;
+  padding: 5px 8px;
+}
+
 .info.legend span {
   display: block;
 }
