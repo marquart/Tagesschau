@@ -22,7 +22,7 @@ function click({target}) {
 
   target.setStyle({
     weight: this.currentStrokeWidth,
-    color: `#${this.currentStrokeColor}`,
+    color: `${this.currentStrokeColor}`,
     dashArray: "" 
   })
   
@@ -100,7 +100,7 @@ export default {
           return {
             weight: this.strokeWidth,
             opacity: 1,
-            color: `#${this.strokeColor}`,
+            color: `${this.strokeColor}`,
             dashArray: "1",
             fillColor: getColor(valueParam, this.colorScale, min, max),
             fillOpacity: this.fillOpacity
