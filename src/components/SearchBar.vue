@@ -1,8 +1,8 @@
 <template>
     <div class="SearchBar">
-    <p>{{words.length}} Wörter geladen</p>
-
+        
         <div class="autocomplete">
+            <p>{{words.length}} Wörter geladen</p>
             <input class="searchfield"
                 placeholder="Bitte gib einen Suchbegriff ein und suche mit Enter"
                 v-model="searchString"
@@ -97,7 +97,8 @@ export default {
     .autocomplete {
     padding: 0.7em;
     /*box-shadow: 0.5em 0.4em #5a5a5a;*/
-    background-color: #f1f1f1; /*#dcdcdc;*/
+    /*background-color: #f1f1f1; /*#dcdcdc;*/
+    background: linear-gradient(to bottom, #ffffff,  #e2e1dc );
     box-sizing: border-box;
 
     }
@@ -143,5 +144,12 @@ export default {
     .autocomplete-result:hover {
     background-color:  rgb(1, 69, 150); /*#4AAE9B;*/
     color: white;
+    }
+
+    p {
+        margin-top: 0;
+        margin-bottom: 0;
+        text-align: center;
+        color: black;
     }
 </style>
