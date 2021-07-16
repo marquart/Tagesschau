@@ -66,7 +66,6 @@ export default {
       this.values = values;
       this.draw()
     }
-
   },
 
   methods: {
@@ -174,7 +173,7 @@ export default {
     
     this.fillDates();
 
-    this.figureWidth = window.innerWidth - this.margin - 8;
+    this.figureWidth = window.innerWidth/1.3;
     this.figureHeight = window.innerHeight  - 4*this.margin;
     if (this.figureHeight<0) this.figureHeight = 0;
 
@@ -187,7 +186,7 @@ export default {
       .attr("transform", "translate(" + this.margin/6 + ",0)");
 
     this.yScale = d3.scaleLinear().range([this.figureHeight, 0]);
-    this.xScale = d3.scaleLinear().range([0, this.figureWidth]);
+    this.xScale = d3.scaleLinear().range([0, this.figureWidth-15]);
 
     this.linegenerator = d3.line()
         .x(this.getX) // set the x values for the line generator

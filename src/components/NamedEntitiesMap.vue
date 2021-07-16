@@ -1,50 +1,17 @@
 <template>
   <div id="map">
-    <h2>Karte zur außenpolitischen Berichterstattung</h2>
-    <div style="margin-bottom:2em;"></div>
+    <h2 style="margin-bottom:2em;">Karte zur außenpolitischen Berichterstattung</h2>
     <Slider @newMonth="updateMap"/>
     <l-map 
-    :center="center" 
-    :zoom="2"
-    :minZoom="1"
-    :maxZoom="5" 
-    :options="mapOptions"
-    style="height: 700px; 
-            background-color: #011e58;
-            color:#000000;
-            border-color: black;
-            border-width: 5px;
-            border-style: solid">
-      <l-control-zoom position="bottomright" maxZoom="1"></l-control-zoom>
-      <l-choropleth-layer 
-      @activeState = "updateActiveState"
-      :data="nerData" 
-      titleKey="state_name" 
-      idKey="state_id" 
-      :value="value" 
-      :extraValues="extraValues" 
-      geojsonIdKey="NAME" 
-      :geojson="worldGeojson" 
-      :colorScale="colorScale"
-      :strokeWidth="1"
-      strokeColor="ffffff"
-      :currentStrokeWidth="currentStrokeWidth"
-      currentStrokeColor = "f5d81b"
-      :monthIndex="monthIndex">
+    :center="center" :zoom="2" :minZoom="1" :maxZoom="5" :options="mapOptions"
+    style="height: 700px; background-color: #011e58; color:#000000; border-color: black; border-width: 5px; border-style: solid">
+      <l-control-zoom position="bottomright"</l-control-zoom>
+      <l-choropleth-layer @activeState = "updateActiveState" :data="nerData" titleKey="state_name" idKey="state_id" :value="value" :extraValues="extraValues" :monthIndex="monthIndex"
+        geojsonIdKey="NAME" :geojson="worldGeojson" 
+        :colorScale="colorScale" :strokeWidth="1" strokeColor="ffffff" :currentStrokeWidth="currentStrokeWidth" currentStrokeColor = "f5d81b">
         <template slot-scope="props">
-          <l-info-control 
-          :item="props.currentItem" 
-          :unit="props.unit" 
-          title=" " 
-          placeholder="Staat auswählen"
-          :monthIndex="monthIndex"/>
-          <l-reference-chart 
-          title="Erwähnung pro Folge" 
-          :colorScale="colorScale" 
-          :min="props.min" 
-          :max="props.max" 
-          position="topright"
-          :monthIndex="monthIndex"/> 
+          <l-info-control :item="props.currentItem" :unit="props.unit" title=" " placeholder="Staat auswählen" :monthIndex="monthIndex"/>
+          <l-reference-chart title="Erwähnung pro Folge" :colorScale="colorScale" :min="props.min" :max="props.max" position="topright"/> 
         </template>
       </l-choropleth-layer>
     </l-map>
@@ -53,8 +20,6 @@
 </template>
 
 <script>
-// import { InfoControl, ReferenceChart, ChoroplethLayer } from '../../vue-choropleth'
-// import { InfoControl, ReferenceChart, ChoroplethLayer } from 'vue-choropleth'
 import InfoControl from './InfoControl'
 import ReferenceChart from './ReferenceChart'
 import ChoroplethLayer from './ChoroplethLayer'
@@ -79,14 +44,9 @@ export default {
     return {
       nerData,
       worldGeojson,
-      
       monthIndex: "0",
-
-      colorScale: ["#f2f8fc", "#00256e"],
-      //center: [38, 13],
-      center: [42, 20],
-      currentStrokeWidth: 3, 
       activeState: "",
+
       value: {
         key: "count",
         metric: "<br>(Erwähnung pro Folge gesamt)<br><u>Kookkurenzen:</u>"
@@ -95,6 +55,10 @@ export default {
         key: "coocc",
         metric: ""
       }],
+      colorScale: ["#f2f8fc", "#00256e"],
+      //center: [38, 13],
+      center: [42, 20],
+      currentStrokeWidth: 3, 
       mapOptions: {
         attributionControl: false,
         zoomControl: false,
@@ -102,12 +66,6 @@ export default {
       },
     }
   },
-
-
-  mounted() {
-      //this.fetchData(); // Um die Daten asynchron von einem Backend zu holen -> rendert die Seite für den Benutzer schneller
-      // this.loadData(); // Lädt die Daten aus JS-Skript -> -> rendert die Seite für den Benutzer langsamer, aber kein Backend nötig
-    },
 
   methods: {
 
@@ -128,21 +86,20 @@ export default {
 
     updateActiveState(activeState){
       this.activeState = activeState
-    },
-
-    
+    }
   }
-} 
+}
 
 </script> 
 <style> 
 #map {
     height: 90%;
-    width: 90%; 
+    width: 80%; 
     margin:0px auto;
     font-family: 'PT Sans','Barlow', Helvetica, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: inherit;
+    margin-top: 5em;
     }
 </style>

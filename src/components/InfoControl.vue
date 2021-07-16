@@ -1,5 +1,5 @@
 <template>
-
+  <div id="infoControl"/>
 </template>
 
 <script>
@@ -18,17 +18,20 @@ export default {
       default: "bottomleft"
     }
   },
+
   mounted() {
     const { unit, title, placeholder, position } = this
 
     this.mapObject = L.control({
       position: position
     })
+
     this.mapObject.onAdd = function(map) {
       this._div = L.DomUtil.create("div", "info") // create a div with a class "info"
       this.update({ name: "", value: 0, unit, placeholder, title })
       return this._div
     }
+
     this.mapObject.update = function({
       name,
       value,
@@ -55,12 +58,14 @@ export default {
       this.deferredMountedTo(this.$parent.mapObject)
     }
   },
+
   methods: {
     deferredMountedTo(parent) {
       this.parent = parent
       this.mapObject.addTo(parent)
     }
   },
+
   watch: {
     item: function(newValue) {
       this.mapObject.update({
@@ -70,8 +75,8 @@ export default {
         placeholder: this.placeholder
       })
     }
-
   },
+
   beforeDestroy() {
     if (this.parent) {
       this.parent.removeControl(this.mapObject)
@@ -79,11 +84,15 @@ export default {
   }
 }
 </script>
+
 <style>
 .info {
+
+  font-family: 'PT Sans','Barlow', Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   padding: 6px 8px;
-  font: 18px/20px sans-serif;
-  background: white;
+  font: 18px/20px ;
   background: rgba(255, 255, 255, 0.8);
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
