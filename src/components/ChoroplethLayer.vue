@@ -1,9 +1,7 @@
 <template>
   <div id="choroplethLayer">
-    <p v-if="gesamt"><b>Gesamt</b></p>
-    <p v-else><b>{{dates[monthIndex]}}</b></p>
     <l-geo-json :key="monthIndex" :geojson="geojsonData.geojson" :options="geojsonOptions" ref="geolayer" :visible="monthIndex === monthIndex"></l-geo-json>
-    <slot :currentItem="currentItem" :unit="value.metric" :min="min" :max="max" ></slot>
+    <slot :unit="value.metric" :min="min" :max="max" ></slot>
   </div>
 </template>
 <script>
@@ -36,84 +34,10 @@ function click({target}) {
   let item = this.geojsonData.data.find(
     x => x[this.idKey] == geojsonItem[this.geojsonIdKey]
   )
-  if (!item) {
-    this.currentItem = { name: "", value: 0 }
-    return
-  } else {
+  if (item){
     this.activeState = item[this.titleKey]
   }
-
-  let tempItem = { name: item[this.titleKey], value: item[this.value.key] }
-  if (this.extraValues) {
-    let tempValues = []
-    for (let x of this.extraValues) {
-      tempValues.push({
-        value: item[x.key],
-        metric: x.metric
-      })
-    }
-    tempItem = { ...tempItem, extraValues: tempValues }
-  }
-  this.currentItem = tempItem
-  console.log(this.currentItem);
-  
 }
-
-
-/*
-function mouseover({ target }) {
-  target.setStyle({
-    weight: this.currentStrokeWidth,
-    color: `#${this.currentStrokeColor}`,
-    dashArray: "" 
-  })
-
-  if (!L.Browser.ie && !L.Browser.opera) {
-    target.bringToFront()
-  } 
-
-  let geojsonItem = target.feature.properties
-  let item = this.geojsonData.data.find(
-    x => x[this.idKey] == geojsonItem[this.geojsonIdKey]
-  )
-  if (!item) {
-    this.currentItem = { name: "", value: 0 }
-    return
-  }
-
-  let tempItem = { name: item[this.titleKey], value: item[this.value.key] }
-  if (this.extraValues) {
-    let tempValues = []
-    for (let x of this.extraValues) {
-      tempValues.push({
-        value: item[x.key],
-        metric: x.metric
-      })
-    }
-    tempItem = { ...tempItem, extraValues: tempValues }
-  }
-  this.currentItem = tempItem
-}
-
-
-function click({ target }) {
-  let geojsonItem = target.feature.properties
-  let item2 = this.geojsonData.data.find(
-    x => x[this.idKey] == geojsonItem[this.geojsonIdKey]
-  ) 
-  if (item2) {
-    this.activeState = item2[this.titleKey]
-  } 
-}
-
-function mouseout({ target }) {
-  target.setStyle({
-    weight: this.strokeWidth,
-    color: this.colorScale[0],
-  })
-  this.currentItem = { name: "", value: 0 }
-}
-*/
 
 export default {
   props: {
@@ -139,10 +63,7 @@ export default {
     return {
       activeState: "",
       fillOpacity: 0.75,
-      dates: {},
-      gesamt : true,
       oldtarget: false,
-      currentItem: { name: "", value: 0 },
       geojsonOptions: {
         style: feature => {
           let itemGeoJSONID = feature.properties[this.geojsonIdKey]
@@ -173,7 +94,7 @@ export default {
             fillOpacity: this.fillOpacity
             }
           }
-        
+
           const { min, max } = this
  
           return {
@@ -233,37 +154,14 @@ export default {
         }
       }
       this.monthIndex = '0'
-    },
-
-    fillDates() {
-      let year = 2014;
-      let month = 4;
-      let months = ["Jan", "Feb", "Mar", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
-      for (var i = 0; i < 85; i++){
-        let out = "";
-        month += 1;
-        if (month > 12){
-          month = 1;
-          year += 1;
-        }
-        if (i == 0){
-          out = "Gesamt";
-        } else {
-          out = months[month-1] + " " + new String(year);
-        }
-        let j = new String(i);
-        this.dates[j] = out;
-      }
     }
   },
 
   mounted() {
   if (this.$parent._isMounted) {
     this.deferredMountedTo(this.$parent.mapObject)
+    }
   }
-  this.fillDates();
-  this.gesamt = false;
-  },
 }
 </script>
 
@@ -273,10 +171,10 @@ export default {
     font-family: 'PT Sans','Barlow', Helvetica, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: left;
+    text-align: right;
     color: white;
-    margin-top: 1%;
-    margin-left: 3%;
+    margin-top: 34%;
+    margin-right: 3%;
     font-size:18px;
     }
 </style>
