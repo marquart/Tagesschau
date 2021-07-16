@@ -1,8 +1,8 @@
 <template>
   <div id="keyworddensity">
     <h2>Kurvengrafik zur Wortdichte</h2>
-    <div class="explanation" @click="switchInfo">
-      <h4 class="infotoggle">{{beschreibung}}</h4>
+    <div class="explanation">
+      <h4 class="infotoggle" @click="switchInfo">{{beschreibung}}</h4>
       <div v-show="showInfo">
         <p>Die Wortdichte zeigt den Anteil eines Wortes in einer Sammlung von Wörtern an, indem es die Anzahl des Wortes durch die Gesamtzahl von Wörtern in der Sammlung teilt. Für die Darstellung der Wortdichten in der Tagesschau über die Zeit haben wir zwei Vereinfachungen vorgenommen: zum einen haben wir versucht, nur Inhaltswörter einzubeziehen, d.h. Nomen, Adjektive, Adverbien und Vollverben. Zum anderen haben wir die Tagesschauen nach den Monaten gruppiert, in denen sie jeweils gesendet wurden.</p>
         <p>Um die Wortdichte eines Begriffes zu sehen, kannst du im unteren Suchfeld bis zu fünf Begriffe suchen, deren Wortdichten über die Zeit in einem Kurvendiagramm angezeigt werden.</p>
