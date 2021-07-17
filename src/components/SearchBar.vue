@@ -1,45 +1,24 @@
 <template>
     <div class="SearchBar">
-        
+        <div class="navmode">
+            <div class="selectmode" :style="searchStyle" @click="showTopwords=false">Begriffs-Suche</div>
+            <div class="selectmode" :style="selectStyle" @click="showTopwords=true">Auswählen von pro Monat herausstechenden Begriffen</div>
+        </div>
         <div class="autocomplete">
             <p>{{words.length}} Wörter geladen</p>
-            <input class="searchfield"
-                placeholder="Bitte gib einen Suchbegriff ein und suche mit Enter"
-                v-model="searchString"
-                type="text"
-                @keydown.enter="setResults(false)"
-            />
-            <input type="submit" value="Suche" id="button" @click="setResults(false)"
-            />
-            <div>
-                <p class="infotoggle" @click="toggleTopwords">Oder wähle einen Begriff mit einem hohen <a href="https://de.wikipedia.org/wiki/Tf-idf-Ma%C3%9F" target="_blank">Tf-idf-Wert</a> aus einem Monat {{openedTopwords}}</p>
-                <div v-show="showTopwords">
-                    <select class="selectfield"
-                        v-model="selectedYear">
-                        <option disabled selected value="Wähle ein Jahr aus">Wähle ein Jahr aus</option>
-                        <option class="selectoption"
-                            v-for="(year, i) in Object.keys(topwords)"
-                            :key="i"
-                            :value="year"
-                        >
-                            {{year}}
-                        </option>
-                    </select>
-                    <select class="selectfield"
-                        v-if="selectedYear"
-                        v-model="selectedMonth">
-                        <option disabled selected value="Wähle einen Monat aus">Wähle einen Monat aus</option>
-                        <option class="selectoption"
-                            v-for="(month, i) in Object.keys(topwords[selectedYear])"
-                            :key="i"
-                            :value="month"
-                        >
-                            {{month}}
-                        </option>
-                    </select>
-                
-                </div>
+
+            <div v-show="!showTopwords">
+                <input class="searchfield"
+                    placeholder="Bitte gib einen Suchbegriff ein und suche mit Enter"
+                    v-model="searchString"
+                    type="text"
+                    @keydown.enter="setResults(false)"
+                />
+                <input type="submit" value="Suche" id="button" @click="setResults(false)"
+                />
             </div>
+            <TopWordSelect v-show="showTopwords" @showResults="setResults"/>
+
             <ul class="autocomplete-results" v-show="isOpen" >
                 <li class="autocomplete-result"
                     v-for="(result, i) in results"
@@ -54,10 +33,13 @@
 </template>
 
 <script>
-import top_tfidf_words from '../../public/year_month_topwords.json'
+import TopWordSelect from './TopWordSelect.vue'
 
 export default {
     name: 'SearchBar',
+    components: {
+      TopWordSelect
+    },
     props: {
         words: Array
     },
@@ -67,37 +49,33 @@ export default {
             results: [],
             isOpen: false,
 
-            topwords: top_tfidf_words,
             showTopwords: false,
-            selectedYear: 0,
-            selectedMonth: ''
+            searchStyle: {background: '#ffffff'},
+            selectStyle: {background: '#f1f0ed'},
         }
-    },
-    computed: {
-        openedTopwords() {
-            if (this.showTopwords) return "▼";
-            else return "▶";
-        }
-
     },
     watch: {
-        selectedMonth() {
-            if (this.topwords.hasOwnProperty(this.selectedYear) && this.topwords[this.selectedYear].hasOwnProperty(this.selectedMonth)) {
-                this.setResults(true)
+        showTopwords() {
+            if (this.showTopwords){
+                this.selectStyle.background = '#ffffff';
+                this.searchStyle.background = '#f1f0ed';
+            } else {
+                this.selectStyle.background = '#f1f0ed';
+                this.searchStyle.background = '#ffffff';
             }
         }
     },
     methods: {
         addWord(result) {
-            this.showTopwords = false;
+            //this.showTopwords = false;
             this.isOpen = false;
             this.$emit('add', result)
         },
 
-        setResults(from_topwords) {
+        setResults(selectedTopwords) {
             this.isOpen = true;
-            this.showTopwords = false;
-            if (from_topwords) this.results = this.topwords[this.selectedYear][this.selectedMonth];
+            //this.showTopwords = false;
+            if (selectedTopwords) this.results = selectedTopwords;
             else if (this.searchString.length >=2) {
                 //this.results = Array.from(this.filterWords());
                 //this.isOpen = true;
@@ -126,13 +104,6 @@ export default {
             if (!this.$el.contains(event.target)) {
                 this.isOpen = false;
             }
-        },
-
-        toggleTopwords() {
-            if (this.showTopwords) this.showTopwords = false;
-            else this.showTopwords = true;
-            this.selectedMonth = '';
-            this.selectedYear = 0;
         }
     },
     mounted() {
@@ -161,15 +132,26 @@ export default {
         box-sizing: border-box;
 
     }
-
-    .selectfield {
-        font-size: 1.2em;
-        font-family: inherit;
-        margin: 0.3em;
+    .navmode {
+        width: 100%;
+        height: auto;
     }
 
-    .selectfield:hover, .selectoption:hover {
+    .selectmode {
+        width: 50%;
+        font-size: 1.2em;
+        font-family: inherit;
+        display: inline-block;
+        text-align: center;
+        background: #ffffff;
+        color: black;
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+    }
+
+    .selectmode:hover {
         cursor: pointer;
+        background: #e2e1dc;
     }
 
     .searchfield {
