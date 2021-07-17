@@ -132,7 +132,7 @@ export default {
     -moz-osx-font-smoothing: inherit;
     text-align: inherit;
     margin-left: 5%;
-    margin-right: 5%;
+    margin-right: 4.6%;
 
 
   }

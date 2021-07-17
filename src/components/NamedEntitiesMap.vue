@@ -125,7 +125,9 @@ export default {
 <style> 
 #map {
     height: 90%;
-    width: 80%; 
+    width: 81%;
+    margin-left: 55%;
+    margin-right: 5%;
     margin:0px auto;
     font-family: 'PT Sans','Barlow', Helvetica, sans-serif;
     -webkit-font-smoothing: antialiased;
