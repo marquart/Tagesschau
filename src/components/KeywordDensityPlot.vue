@@ -125,14 +125,15 @@ export default {
     background: inherit;
     background-attachment: inherit;
     background-size: inherit;
-    margin: inherit;
 
 
     font-family: inherit;
     -webkit-font-smoothing: inherit;
     -moz-osx-font-smoothing: inherit;
     text-align: inherit;
-    margin: inherit;
+    margin-left: 5%;
+    margin-right: 5%;
+
 
   }
 
