@@ -86,6 +86,20 @@ export default {
               fillOpacity: this.fillOpacity
             }
           }
+
+          const { min, max } = this
+
+          /*
+          if (item[this.titleKey] === this.activeState){
+            return{
+              weight: this.currentStrokeWidth,
+              opacity: 1,
+              color: `${this.currentStrokeColor}`,
+              dashArray: "1",
+              fillColor: getColor(valueParam, this.colorScale, min, max),
+              fillOpacity: this.fillOpacity
+            }
+          } */
           
           if (item[this.idKey] === "Germany"){
             return {
@@ -95,8 +109,6 @@ export default {
             }
           }
 
-          const { min, max } = this
- 
           return {
             weight: this.strokeWidth,
             opacity: 1,
