@@ -1,7 +1,9 @@
 <template>
     <div id="linePlot">
-        <p v-if="activeState"><b>{{activeState}}</b></p>
-        <p v-else><b>Staat auswählen</b></p>
+        <p v-if="activeState" style="text-align: center; font-family: 'PT Sans','Barlow', Helvetica, sans-serif; -webkit-font-smoothing: antialiased; 
+        -moz-osx-font-smoothing: grayscale"><b>{{activeState}}</b></p>
+        <p v-else style="text-align: center; font-family: 'PT Sans','Barlow', Helvetica, sans-serif; -webkit-font-smoothing: antialiased; 
+        -moz-osx-font-smoothing: grayscale"><b>Staat auswählen</b></p>
         <div id="showPlot"/>
         <div id="hovertext" :style="hoverTextStyle">
             <p class="date">{{dates_array[mouseindex]}}:</p>

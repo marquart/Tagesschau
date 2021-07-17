@@ -1,7 +1,17 @@
 <template>
   <div id="map">
-    <h2 style="margin-bottom:2em;">Karte zur außenpolitischen Berichterstattung</h2>
-    <Slider @newMonth="updateMap"/>
+    <h2>Karte zur außenpolitischen Berichterstattung</h2>
+    <div class="explanation">
+      <h4 class="infotoggle" @click="switchInfo">{{beschreibung}}</h4>
+      <div v-show="showInfo">
+        <p>Für die Karte zur Analyse der außenpolitischen Berichterstattung der Tagesschau wurden die Untertitel mithilfe von Named Entity Recognition auf die Erwähnung von Staatennamen (außer Deutschland) untersucht. 
+          Die Karte zeigt, wie oft die jeweiligen Staaten pro Episode pro Monat oder im gesamten Zeitraum erwähnt wurden.
+          In der Infobox unten rechts sind die Top 10 Kookkurenzen für den ausgewählten Staat im gewählten Zeitraum zu sehen.</p>
+        <p>Unter der Karte findest du einen LinePlot, der die Entwicklung der Berichterstattung über die jeweiligen Staaten darstellt. 
+          Über einen Mausklick in den Plot können die Kookkurrenzen für den jeweiligen Monat in der Karte angezeigt werden. </p>
+      </div>
+    </div>
+    <Slider @newMonth="updateMap" :monthIndex="monthIndex"/>
     <l-map 
     :center="center" :zoom="2" :minZoom="1" :maxZoom="5" :options="mapOptions"
     style="height: 600px; background-color: #011e58; color:#000000; border-color: black; border-width: 5px; border-style: solid; font-family: 'PT Sans','Barlow', Helvetica, sans-serif;
@@ -11,7 +21,7 @@
       <p v-else style="margin-top: 560px; margin-right: 15px; text-align: right; font-size:18px; color:#fff"><b>Gesamt</b></p>
       <l-choropleth-layer @activeState = "updateActiveState" :data="nerData" titleKey="state_name" idKey="state_id" :value="value" :extraValues="extraValues" :monthIndex="monthIndex"
         geojsonIdKey="NAME" :geojson="worldGeojson"
-        :colorScale="colorScale" :strokeWidth="1" strokeColor="ffffff" :currentStrokeWidth="currentStrokeWidth" currentStrokeColor = "f5d81b">
+        :colorScale="colorScale" :strokeWidth="1" strokeColor="#ffffff" :currentStrokeWidth="currentStrokeWidth" currentStrokeColor = "#c97412">
         <template slot-scope="props">
           <l-info-control :item="props.currentItem" :unit="props.unit" title=" " placeholder="Staat auswählen" :monthIndex="monthIndex" :nerData="nerData" :activeState="activeState"/>
           <l-reference-chart title="Erwähnung pro Folge" :colorScale="colorScale" :min="props.min" :max="props.max" position="topright"/> 
@@ -50,6 +60,7 @@ export default {
       dates: {},
       monthIndex: "0",
       activeState: "",
+      showInfo: false,
       value: {
         key: "count",
         metric: "<br><u>Kookkurenzen:</u>"
@@ -83,14 +94,27 @@ export default {
       this.monthIndex = monthIndex
     },
     sendPlotPosition(plotpos) {
-      this.monthIndex = plotpos+1;
+      this.monthIndex = String(plotpos+1);
       this.updateMap(this.monthIndex);
     },
 
     updateActiveState(activeState){
       this.activeState = activeState
+    },
+
+    switchInfo() {
+        if (this.showInfo) this.showInfo = false;
+        else this.showInfo = true;
+      }
+  },
+
+  computed: {
+    beschreibung() {
+      if (this.showInfo) return "Info ▼";
+      else return "Info ▶";
     }
   },
+
 
   created(){
     this.gesamt = false;

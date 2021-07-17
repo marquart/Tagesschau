@@ -1,7 +1,8 @@
 <template>
     <div id="slider">
-        <vue-slider v-model="value" :data="dates" v-bind = "options"/>
+        <vue-slider ref="slider" v-model="value" :data="dates" v-bind = "options"/>
     </div>
+    
 </template>
 
 <script>
@@ -11,6 +12,9 @@ import 'vue-slider-component/theme/default.css'
 export default {
   components: {
     VueSlider
+  },
+  props: {
+    monthIndex : String,
   },
   data () {
     return {
@@ -63,6 +67,9 @@ export default {
   watch: {
     value() {
         this.$emit('newMonth', this.value);
+    },
+    monthIndex(){
+      this.$refs.slider.setValue(this.monthIndex);
     }
   }
 }
