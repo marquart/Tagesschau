@@ -1,5 +1,5 @@
 <template>
-    <div class="SearchBar">
+    <div id="SearchBar">
         <div class="navmode">
             <div class="selectmode" :style="searchStyle" @click="showTopwords=false">Begriffs-Suche</div>
             <div class="selectmode" :style="selectStyle" @click="showTopwords=true">Auswählen von pro Monat herausstechenden Begriffen</div>
@@ -117,7 +117,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .SearchBar {
+    #SearchBar {
         margin-left: 5%;
         margin-right: 5%;
         text-align: center;

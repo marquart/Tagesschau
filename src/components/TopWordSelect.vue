@@ -2,7 +2,8 @@
     <div>
         <p>Hier kannst du einen Begriff mit einem hohen <a href="https://de.wikipedia.org/wiki/Tf-idf-Ma%C3%9F" target="_blank">Tf-idf-Wert</a> aus einem Monat auswählen</p>
 
-        <select class="selectfield"
+        <label for="yearselect">Wähle ein Jahr aus:</label>
+        <select class="selectfield" id="yearselect"
             v-model="selectedYear">
             <option disabled selected value="Wähle ein Jahr aus">Wähle ein Jahr aus</option>
             <option class="selectoption"
@@ -13,7 +14,9 @@
                 {{year}}
             </option>
         </select>
-        <select class="selectfield"
+
+        <label v-show="validYear" for="monthselect">Wähle einen Monat aus:</label>
+        <select class="selectfield" id="monthselect"
             v-if="validYear"
             v-model="selectedMonth">
             <option disabled selected value="Wähle einen Monat aus">Wähle einen Monat aus</option>
@@ -83,6 +86,10 @@ export default {
         margin-top: 0;
         margin-bottom: 0;
         text-align: center;
+        color: black;
+    }
+
+    label {
         color: black;
     }
 </style>

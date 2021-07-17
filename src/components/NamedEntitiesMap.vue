@@ -1,16 +1,6 @@
 <template>
   <div id="map">
     <h2>Karte zur außenpolitischen Berichterstattung</h2>
-    <div class="explanation">
-      <h4 class="infotoggle" @click="switchInfo">{{beschreibung}}</h4>
-      <div v-show="showInfo">
-        <p>Für die Karte zur Analyse der außenpolitischen Berichterstattung der Tagesschau wurden die Untertitel mithilfe von Named Entity Recognition auf die Erwähnung von Staatennamen (außer Deutschland) untersucht. 
-          Die Karte zeigt, wie oft die jeweiligen Staaten pro Episode pro Monat oder im gesamten Zeitraum erwähnt wurden.
-          In der Infobox unten rechts sind die Top 10 Kookkurenzen für den ausgewählten Staat im gewählten Zeitraum zu sehen.</p>
-        <p>Unter der Karte findest du einen LinePlot, der die Entwicklung der Berichterstattung über die jeweiligen Staaten darstellt. 
-          Über einen Mausklick in den Plot können die Kookkurrenzen für den jeweiligen Monat in der Karte angezeigt werden. </p>
-      </div>
-    </div>
     <Slider @newMonth="updateMap" :monthIndex="monthIndex"/>
     <l-map 
     :center="center" :zoom="2" :minZoom="1" :maxZoom="5" :options="mapOptions"
@@ -60,7 +50,6 @@ export default {
       dates: {},
       monthIndex: "0",
       activeState: "",
-      showInfo: false,
       value: {
         key: "count",
         metric: "<br><u>Kookkurenzen:</u>"
@@ -102,17 +91,9 @@ export default {
       this.activeState = activeState
     },
 
-    switchInfo() {
-        if (this.showInfo) this.showInfo = false;
-        else this.showInfo = true;
-      }
   },
 
   computed: {
-    beschreibung() {
-      if (this.showInfo) return "Info ▼";
-      else return "Info ▶";
-    }
   },
 
 
