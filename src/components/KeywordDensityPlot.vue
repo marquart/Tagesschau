@@ -152,8 +152,4 @@ export default {
     border: 2.5px solid white;
   }
 
-
-  .explanation>p {
-
-  }
 </style>

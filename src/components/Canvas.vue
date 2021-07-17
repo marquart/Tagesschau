@@ -174,14 +174,14 @@ export default {
     },
 
     mounted() {
-        this.figureWidth = window.innerWidth - this.margin;
+        this.figureWidth = window.innerWidth - 1.6*this.margin;
         this.figureHeight = window.innerHeight  - 2*this.margin;
         if (this.figureHeight<0) this.figureHeight = 0;
 
         this.svg = d3
             .select("#canvas")
             .append("svg")
-            .attr("width", this.figureWidth+this.margin)
+            .attr("width", this.figureWidth+1.6*this.margin)
             .attr("height", this.figureHeight+this.margin/3)
             .append('g')
             .attr("transform", "translate(" + this.margin/2 + ",0)");
