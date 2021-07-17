@@ -142,7 +142,7 @@ export default {
     },
     max() {
       if (this.monthIndex == 0) {
-        return (200)
+        return (1.3)
       } else {
         return (3)
         //return getMax(this.geojsonData.data, this.value.key)
