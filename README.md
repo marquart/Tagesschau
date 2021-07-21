@@ -1,13 +1,21 @@
-# app
+# Tagesschau-Explorer
+
+## Scripts for Data Preparation are located in
+.\data-preperation
+
+## Compiled version of this Website is located in
+.\dist\index.html
+
+
+
+## Project setup for development
+```
+npm install
+```
 
 ### Install babel-eslint parser
 ```
 npm install babel-eslint --save-dev
-```
-
-## Project setup
-```
-npm install
 ```
 
 ### Compiles and hot-reloads for development
